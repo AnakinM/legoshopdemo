@@ -13,25 +13,25 @@ public class Transaction {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "time")
+    @Column(name = "time", nullable = false)
     private LocalDateTime time;
 
-    @Column(name = "value")
+    @Column(name = "value", nullable = false)
     private double value;
 
-    @Column(name = "currency")
+    @Column(name = "currency", nullable = false)
     private Currency currency;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private List<LegoSet> basket;
 
-    @Column(name = "ispaid")
+    @Column(name = "ispaid", nullable = false)
     private boolean isPaid;
 
-    @Column(name = "issent")
+    @Column(name = "issent", nullable = true)
     private boolean isSent;
 
-    @Column(name = "isdelivered")
+    @Column(name = "isdelivered", nullable = true)
     private boolean isDelivered;
 
     public Transaction(Long id, LocalDateTime time, double value, Currency currency, List<LegoSet> basket, boolean isPaid, boolean isSent, boolean isDelivered) {
@@ -43,6 +43,10 @@ public class Transaction {
         this.isPaid = isPaid;
         this.isSent = isSent;
         this.isDelivered = isDelivered;
+    }
+
+    public Transaction() {
+
     }
 
     public Long getId() {

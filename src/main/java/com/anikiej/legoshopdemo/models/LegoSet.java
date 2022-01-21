@@ -43,6 +43,10 @@ public class LegoSet {
         this.quantity = quantity;
     }
 
+    public LegoSet() {
+
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
