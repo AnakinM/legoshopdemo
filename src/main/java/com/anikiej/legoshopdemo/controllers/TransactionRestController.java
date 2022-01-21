@@ -17,8 +17,8 @@ public class TransactionRestController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping("/populate")
-    public ResponseEntity<Transaction> setExampleTransactions() {
-        return ResponseEntity.ok(transactionService.setExampleTransactions());
+    @GetMapping("/examples")
+    public ResponseEntity<Transaction> getExampleTransaction() {
+        return ResponseEntity.ok(transactionService.getExampleTransaction());
     }
 }

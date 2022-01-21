@@ -16,7 +16,7 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
-    public Transaction setExampleTransactions() {
+    public Transaction getExampleTransaction() {
         LegoSet set1 = new LegoSet(null, Theme.CLASSIC, "Creative Blue Bricks", 24.29, Currency.GBP, 52, AgeLimit.FOURYEARSPLUS, 100);
         LegoSet set2 = new LegoSet(null, Theme.CLASSIC, "Creative Transparent Bricks", 24.99, Currency.GBP, 500, AgeLimit.FOURYEARSPLUS, 200);
         LegoSet set3 = new LegoSet(null, Theme.CITY, "Hospital", 122.09, Currency.GBP, 816, AgeLimit.SIXYEARSPLUS, 150);
