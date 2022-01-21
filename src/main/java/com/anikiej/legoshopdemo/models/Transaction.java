@@ -34,6 +34,17 @@ public class Transaction {
     @Column(name = "isdelivered")
     private boolean isDelivered;
 
+    public Transaction(Long id, LocalDateTime time, double value, Currency currency, List<LegoSet> basket, boolean isPaid, boolean isSent, boolean isDelivered) {
+        this.id = id;
+        this.time = time;
+        this.value = value;
+        this.currency = currency;
+        this.basket = basket;
+        this.isPaid = isPaid;
+        this.isSent = isSent;
+        this.isDelivered = isDelivered;
+    }
+
     public Long getId() {
         return id;
     }

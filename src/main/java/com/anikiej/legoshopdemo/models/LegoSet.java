@@ -5,7 +5,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "legoset")
 public class LegoSet {
-    @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue
     @Column(name = "id")
     private Long id;
 
@@ -18,6 +20,9 @@ public class LegoSet {
     @Column(name = "price", nullable = false)
     private double price;
 
+    @Column(name = "currency")
+    private Currency currency;
+
     @Column(name = "piecesnumber", nullable = true)
     private Integer piecesNumber;
 
@@ -27,8 +32,16 @@ public class LegoSet {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "isavailable", nullable = false)
-    private boolean isAvailable;
+    public LegoSet(Long id, Theme theme, String name, double price, Currency currency, Integer piecesNumber, AgeLimit ageRestriction, Integer quantity) {
+        this.id = id;
+        this.theme = theme;
+        this.name = name;
+        this.price = price;
+        this.currency = currency;
+        this.piecesNumber = piecesNumber;
+        this.ageRestriction = ageRestriction;
+        this.quantity = quantity;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -62,6 +75,14 @@ public class LegoSet {
         this.price = price;
     }
 
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
     public Integer getPiecesNumber() {
         return piecesNumber;
     }
@@ -84,14 +105,6 @@ public class LegoSet {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public boolean isAvailable() {
-        return this.quantity > 0;
-    }
-
-    public void setIsAvailable() {
-        isAvailable = this.quantity > 0;
     }
 
 }
