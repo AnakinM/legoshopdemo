@@ -9,7 +9,7 @@ import java.util.List;
 public class Transaction {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -43,6 +43,15 @@ public class Transaction {
         this.isPaid = isPaid;
         this.isSent = isSent;
         this.isDelivered = isDelivered;
+    }
+
+    public Transaction(Long id, LocalDateTime time, double value, Currency currency, List<LegoSet> basket, boolean isPaid) {
+        this.id = id;
+        this.time = time;
+        this.value = value;
+        this.currency = currency;
+        this.basket = basket;
+        this.isPaid = isPaid;
     }
 
     public Transaction() {

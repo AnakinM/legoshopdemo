@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransactionService {
@@ -17,12 +18,50 @@ public class TransactionService {
     }
 
     public Transaction getExampleTransaction() {
-        LegoSet set1 = new LegoSet(null, Theme.CLASSIC, "Creative Blue Bricks", 24.29, Currency.GBP, 52, AgeLimit.FOURYEARSPLUS, 100);
-        LegoSet set2 = new LegoSet(null, Theme.CLASSIC, "Creative Transparent Bricks", 24.99, Currency.GBP, 500, AgeLimit.FOURYEARSPLUS, 200);
-        LegoSet set3 = new LegoSet(null, Theme.CITY, "Hospital", 122.09, Currency.GBP, 816, AgeLimit.SIXYEARSPLUS, 150);
-        double totalPrice = set1.getPrice() + set2.getPrice() + set3.getPrice();
-        Transaction transaction1 = new Transaction(null, LocalDateTime.now(), totalPrice, Currency.GBP, List.of(set1, set2, set3), true, true, true);
+        LegoSet set1 = new LegoSet(null, Theme.CLASSIC, "Creative Blue Bricks", 4.49, Currency.GBP, 52, AgeLimit.FOURYEARSPLUS, 3);
+        LegoSet set2 = new LegoSet(null, Theme.CLASSIC, "Creative Transparent Bricks", 24.99, Currency.GBP, 500, AgeLimit.FOURYEARSPLUS, 2);
+        LegoSet set3 = new LegoSet(null, Theme.CITY, "Hospital", 89.99, Currency.GBP, 816, AgeLimit.SIXYEARSPLUS, 1);
+        double totalPrice = set1.getPrice() * set1.getQuantity()
+                + set2.getPrice() * set2.getQuantity()
+                + set3.getPrice() * set3.getQuantity();
+        Transaction transaction1 = new Transaction(null, LocalDateTime.now(), totalPrice, Currency.GBP, List.of(set1, set2, set3), false, false, false);
         return transactionRepository.save(transaction1);
+    }
+
+    public Transaction getEmptyTransaction() {
+        return new Transaction(null, LocalDateTime.now(), 0, Currency.GBP, null, false);
+    }
+
+    public List<Transaction> getAllTransactions() {
+        return transactionRepository.findAll();
+    }
+
+    public Transaction getTransactionById(Long id) {
+        Optional<Transaction> transaction = transactionRepository.findById(id);
+        return transaction.orElse(new Transaction());
+    }
+
+    public Transaction applyDiscountInPercent(Integer percent, Long id) {
+        Transaction transaction = getTransactionById(id);
+        double transactionValue = transaction.getValue();
+        if (percent > 0 && percent <= 100 && transactionValue > 0) {
+            double discountAmount = transactionValue * (percent.doubleValue() / 100.0);
+            double discountedValue = transactionValue - discountAmount;
+            transaction.setValue(discountedValue);
+            transactionRepository.save(transaction);
+            return transaction;
+        }
+       return new Transaction();
+    }
+
+    public Transaction payForTransaction(Long id) {
+        Transaction transaction = getTransactionById(id);
+        if (transaction.getId() != null) {
+            transaction.setPaid(true);
+            transactionRepository.save(transaction);
+            return transaction;
+        }
+        return new Transaction();
     }
 
 }
