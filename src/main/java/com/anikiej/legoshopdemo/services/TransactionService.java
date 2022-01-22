@@ -29,7 +29,7 @@ public class TransactionService {
     }
 
     public Transaction getEmptyTransaction() {
-        return new Transaction(null, LocalDateTime.now(), 0, Currency.GBP, null, false);
+        return new Transaction(null, LocalDateTime.of(2022, 1, 1, 0, 0), 0, Currency.GBP, null, false);
     }
 
     public List<Transaction> getAllTransactions() {
@@ -38,30 +38,62 @@ public class TransactionService {
 
     public Transaction getTransactionById(Long id) {
         Optional<Transaction> transaction = transactionRepository.findById(id);
-        return transaction.orElse(new Transaction());
+        return transaction.orElse(null);
     }
 
     public Transaction applyDiscountInPercent(Integer percent, Long id) {
-        Transaction transaction = getTransactionById(id);
-        double transactionValue = transaction.getValue();
-        if (percent > 0 && percent <= 100 && transactionValue > 0) {
-            double discountAmount = transactionValue * (percent.doubleValue() / 100.0);
-            double discountedValue = transactionValue - discountAmount;
-            transaction.setValue(discountedValue);
-            transactionRepository.save(transaction);
-            return transaction;
+        Optional<Transaction> item = transactionRepository.findById(id);
+        if (item.isPresent()) {
+            Transaction transaction = item.get();
+            double transactionValue = transaction.getValue();
+            if (percent > 0 && percent <= 100 && transactionValue > 0) {
+                double discountAmount = transactionValue * (percent.doubleValue() / 100.0);
+                double discountedValue = transactionValue - discountAmount;
+                transaction.setValue(discountedValue);
+                transactionRepository.save(transaction);
+                return transaction;
+            }
         }
        return new Transaction();
     }
 
     public Transaction payForTransaction(Long id) {
-        Transaction transaction = getTransactionById(id);
-        if (transaction.getId() != null) {
+        Optional<Transaction> item = transactionRepository.findById(id);
+        if (item.isPresent()) {
+            Transaction transaction = item.get();
             transaction.setPaid(true);
             transactionRepository.save(transaction);
             return transaction;
         }
         return new Transaction();
+    }
+
+    public Transaction sendTransaction(Long id) {
+        Optional<Transaction> item = transactionRepository.findById(id);
+        if (item.isPresent()) {
+            Transaction transaction = item.get();
+            transaction.setSent(true);
+            transactionRepository.save(transaction);
+            return transaction;
+        }
+        return new Transaction();
+    }
+
+    public boolean isTransactionDelivered(Long id) {
+        Optional<Transaction> item = transactionRepository.findById(id);
+        if (item.isPresent()) {
+            Transaction transaction = item.get();
+            return transaction.isDelivered();
+        }
+        return false;
+    }
+
+    public boolean transactionExistsById(Long id) {
+        return transactionRepository.existsById(id);
+    }
+
+    public void deleteTransactionById(Long id) {
+        transactionRepository.deleteById(id);
     }
 
 }

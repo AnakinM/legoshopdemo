@@ -32,6 +32,12 @@ public class TransactionRestController {
         return ResponseEntity.ok(transactionService.getAllTransactions());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Transaction> getTransactionById(@PathVariable("id") Long id) {
+        Transaction transaction = transactionService.getTransactionById(id);
+        return ResponseEntity.ok(transaction);
+    }
+
     @GetMapping("/{id}/discount")
     public ResponseEntity<Transaction> applyDiscountInPercent(@RequestParam Integer percent, @PathVariable("id") Long id) {
         Transaction transaction = transactionService.applyDiscountInPercent(percent, id);
@@ -39,9 +45,31 @@ public class TransactionRestController {
     }
 
     @GetMapping("/{id}/pay")
-    public ResponseEntity<Transaction> applyDiscountInPercent(@PathVariable("id") Long id) {
+    public ResponseEntity<Transaction> payForTransaction(@PathVariable("id") Long id) {
         Transaction transaction = transactionService.payForTransaction(id);
         return ResponseEntity.ok(transaction);
+    }
+
+    @GetMapping("/{id}/send")
+    public ResponseEntity<Transaction> sendTransaction(@PathVariable("id") Long id) {
+        Transaction transaction = transactionService.sendTransaction(id);
+        return ResponseEntity.ok(transaction);
+    }
+
+    @GetMapping("/{id}/isdelivered")
+    public ResponseEntity<Boolean> isTransactionDelivered(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(transactionService.isTransactionDelivered(id));
+    }
+
+    @GetMapping("/{id}/exists")
+    public ResponseEntity<Boolean> transactionExistsById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(transactionService.transactionExistsById(id));
+    }
+
+    @GetMapping("/{id}/delete")
+    public ResponseEntity<String> deleteTransactionById(@PathVariable("id") Long id) {
+        transactionService.deleteTransactionById(id);
+        return ResponseEntity.ok("Deleted");
     }
 
 }
